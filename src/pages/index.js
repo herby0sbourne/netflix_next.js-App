@@ -1,11 +1,12 @@
 import Head from "next/head";
 import Banner from "components/Banner/Banner";
 import NavBar from "components/NavBar/NavBar";
-import Card from "components/Card/Card";
+import CardSlider from "components/CardSlider/CardSlider";
+import { getVideos } from "lib/videos";
 
 import styles from "@/styles/Home.module.css";
 
-export default function Home() {
+export default function Home({ disneyVideos, prodVideos, travelVideos, popularVideos }) {
   return (
     <>
       <Head>
@@ -21,10 +22,23 @@ export default function Home() {
           subTitle="a very cute dog"
           imgUrl="/static/reddog.jpg"
         />
-        <Card imgUrl="/static/reddog.jpg" size="large" />
-        <Card imgUrl="/static/reddog.jpg" size="medium" />
-        <Card imgUrl="/static/reddog.jpg" size="small" />
+
+        <CardSlider title={"Disney"} videos={disneyVideos} size="large" />
+        <CardSlider title={"Travel"} videos={travelVideos} size="small" />
+        <CardSlider title={"Productivity"} videos={prodVideos} size="medium" />
+        <CardSlider title={"Popular"} videos={popularVideos} size="small" />
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const disneyVideos = await getVideos("disney trailer");
+  const prodVideos = await getVideos("productivity");
+  const travelVideos = await getVideos("travel");
+  const popularVideos = await getVideos();
+
+  return {
+    props: { disneyVideos, prodVideos, travelVideos, popularVideos }
+  };
 }
