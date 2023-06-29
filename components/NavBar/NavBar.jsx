@@ -1,17 +1,42 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import styles from "./NavBar.module.css";
+import { magic } from "../../lib/magic";
 
 import expandIcon from "../../public/static/expand_more.svg";
 import netflixIcon from "../../public/static/netflix_logo.svg";
-import Image from "next/image";
+import styles from "./NavBar.module.css";
 
-const NavBar = ({ userName }) => {
+const NavBar = () => {
   const [isDropdown, setIsDropdown] = useState(false);
   const nodeRef = useRef(null);
+  const [userName, setUserName] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const { email } = await magic.user.getMetadata();
+        if (!email) return;
+        setUserName(email);
+      } catch (err) {
+        console.log("error retrieving user", err);
+        // Handle errors if required!
+      }
+    })();
+  }, []);
+
+  const signOut = async (e) => {
+    try {
+      await magic.user.logout();
+      router.push("/login");
+    } catch (e) {
+      console.log(e, "error logging out");
+      router.push("/login");
+    }
+  };
 
   const handleOnClickHome = (e) => {
     e.preventDefault();
@@ -44,7 +69,8 @@ const NavBar = ({ userName }) => {
           <div style={{ position: "relative" }}>
             <button className={styles.usernameBtn}>
               <p className={styles.username} onClick={() => setIsDropdown(!isDropdown)}>
-                {userName.match(/^(.*?)@/)[1]}
+                {userName}
+                {/*{userName.match(/^(.*?)@/)[1] }*/}
               </p>
               <Image src={expandIcon} alt="dropdown icon" height="25" width="25" />
             </button>
@@ -57,9 +83,9 @@ const NavBar = ({ userName }) => {
               onEnter={() => setIsDropdown(true)}
               onExited={() => setIsDropdown(false)}>
               <div className={`${styles.navDropdown} alert`} ref={nodeRef}>
-                <Link href="/login" className={styles.linkName}>
+                <button className={styles.linkName} onClick={signOut}>
                   Sign out
-                </Link>
+                </button>
               </div>
             </CSSTransition>
           </div>
