@@ -1,6 +1,7 @@
 import Card from "components/Card/Card";
 
 import styles from "./CardSlider.module.css";
+import Link from "next/link";
 
 const CardSlider = (props) => {
   const { title, videos = [], size } = props;
@@ -10,7 +11,11 @@ const CardSlider = (props) => {
         <h2 className={styles.title}>{title}</h2>
         <div className={styles.cardWrapper}>
           {videos.map((video, idx) => {
-            return <Card key={idx} idx={idx} imgUrl={video.imgUrl} size={size} />;
+            return (
+              <Link href={`/video/${video.id}`} key={idx}>
+                <Card idx={idx} imgUrl={video.imgUrl} size={size} />
+              </Link>
+            );
           })}
         </div>
       </div>
