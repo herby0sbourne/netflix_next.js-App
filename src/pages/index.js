@@ -2,7 +2,7 @@ import Head from "next/head";
 import Banner from "components/Banner/Banner";
 import NavBar from "components/NavBar/NavBar";
 import CardSlider from "components/CardSlider/CardSlider";
-import { getVideos } from "lib/videos";
+import { getPopularVideos, getVideos } from "lib/videos";
 
 import styles from "@/styles/Home.module.css";
 
@@ -18,6 +18,7 @@ export default function Home({ disneyVideos, prodVideos, travelVideos, popularVi
       <main className={styles.container}>
         <NavBar userName="herbyosbourne31@gmail.com" />
         <Banner
+          videoId="4zH5iYM4wJo"
           title="Clifford the red dog"
           subTitle="a very cute dog"
           imgUrl="/static/reddog.jpg"
@@ -36,7 +37,7 @@ export async function getServerSideProps() {
   const disneyVideos = await getVideos("disney trailer");
   const prodVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
-  const popularVideos = await getVideos();
+  const popularVideos = await getPopularVideos();
 
   return {
     props: { disneyVideos, prodVideos, travelVideos, popularVideos }
