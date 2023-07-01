@@ -1,12 +1,14 @@
 import Image from "next/image";
-import playIcon from '../../public/static/play_arrow.svg'
-import styles from './Banner.module.css'
+import { useRouter } from "next/router";
+import playIcon from "../../public/static/play_arrow.svg";
 
-const Banner = ({title, subTitle, imgUrl}) => {
+import styles from "./Banner.module.css";
 
+const Banner = ({ title, subTitle, imgUrl, videoId }) => {
+  const router = useRouter();
   const handleOnPlay = () => {
-    console.log('button clicked')
-  }
+    router.push(`/video/${videoId}`);
+  };
 
   return (
     <div className={styles.container}>
@@ -20,21 +22,22 @@ const Banner = ({title, subTitle, imgUrl}) => {
           <h3 className={styles.subTitle}>{subTitle}</h3>
           <div className={styles.playBtnWrapper}>
             <button className={styles.btnWithIcon} onClick={handleOnPlay}>
-              <Image src={playIcon} alt='play button icon' width='32' height="32"/>
+              <Image src={playIcon} alt="play button icon" width="32" height="32" />
               <span className={styles.playText}>Play</span>
             </button>
           </div>
         </div>
       </div>
-      <div className={styles.bannerImg} style={{
-        background: `url(${imgUrl}) no-repeat center/cover`,
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-      }}>
-      </div>
+      <div
+        className={styles.bannerImg}
+        style={{
+          background: `url(${imgUrl}) no-repeat center/cover`,
+          width: "100%",
+          height: "100%",
+          position: "absolute"
+        }}></div>
     </div>
-  )
-}
+  );
+};
 
-export default Banner
+export default Banner;
