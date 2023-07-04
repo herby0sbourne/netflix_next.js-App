@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { magic } from "../../lib/magic";
+import { magic } from "../../lib/magic.client";
 
 import expandIcon from "../../public/static/expand_more.svg";
 import netflixIcon from "../../public/static/netflix_logo.svg";
@@ -19,11 +19,12 @@ const NavBar = () => {
     (async function () {
       try {
         const { email } = await magic.user.getMetadata();
+        // const didToken = await magic.user.getIdToken();
+        // console.log(didToken);
         if (!email) return;
         setUserName(email);
       } catch (err) {
         console.log("error retrieving user", err);
-        // Handle errors if required!
       }
     })();
   }, []);
