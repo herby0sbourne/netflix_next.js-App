@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { magic } from "../../lib/magic";
+import { magic } from "../../lib/magic.client";
 import useRouterEvent from "../../hooks/useRouterEvent";
 
 import styles from "../styles/Login.module.css";
@@ -23,14 +23,32 @@ export default function Login() {
 
   const handleLogin = async () => {
     handleComplete();
+
     if (!email) {
       setUserMsg("Enter a Valid Email Address");
-    } else if (email === "test@io.com") {
+      return;
+    }
+
+    if (email) {
       try {
         setIsLoading(true);
-        const DIDToken = await magic.auth.loginWithMagicLink({ email: "fogimiy796@fitwl.com" });
+        const DIDToken = await magic.auth.loginWithMagicLink({ email });
+
         if (DIDToken) {
-          router.push("/");
+          const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${DIDToken}`,
+              "Content-Type": "application/json"
+            }
+          });
+
+          const loggedInResponse = await response.json();
+          if (loggedInResponse.done) {
+            router.push("/");
+          } else {
+            setUserMsg("Something went wrong logging in");
+          }
         }
       } catch (e) {
         console.log(e, "something went wrong");
