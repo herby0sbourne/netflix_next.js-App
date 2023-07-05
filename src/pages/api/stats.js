@@ -2,25 +2,31 @@ import jwt from "jsonwebtoken";
 import { findVideoIdByUserId, insertStats, updateStats } from "lib/db/hasura";
 
 export default async function stats(req, res) {
-  if (!(req.method === "POST")) {
-    return res.send({ msg: "not a Post Method" });
-  }
-  const { videoId, favourited, watched = true } = req.body;
-
-  if (!videoId) {
-    return res.send({ msg: "VideoId Missing" });
-  }
-
   try {
+    const { videoId, favourited, watched = true } = req.body;
     const token = req.cookies.token;
 
-    if (!token) {
-      return res.status(403).send({});
-    }
+    if (!videoId) return res.send({ msg: "VideoId Missing" });
+
+    if (!token) return res.status(403).send({});
 
     const decoded = await verifyAndDecodeJWT(token, process.env.NEXT_PUBLIC_JWT_SECRET);
 
-    const doesStatusExist = await findVideoIdByUserId(token, decoded.issuer, videoId);
+    const video = await findVideoIdByUserId(token, decoded.issuer, videoId);
+    const doesStatusExist = video?.length > 0;
+
+    if (req.method === "GET") {
+      if (doesStatusExist) {
+        // video found
+        return res.send(video);
+      }
+      // no video found
+      return res.status(404).send({ user: null, msg: "User not Found" });
+    }
+
+    if (!(req.method === "POST")) {
+      return res.send({ user: null, msg: "not a Post Method" });
+    }
 
     const data = {
       userId: decoded.issuer,
