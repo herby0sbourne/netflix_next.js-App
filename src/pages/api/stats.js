@@ -3,7 +3,9 @@ import { findVideoIdByUserId, insertStats, updateStats } from "lib/db/hasura";
 
 export default async function stats(req, res) {
   try {
-    const { videoId, favourited, watched = true } = req.body;
+    const { favourited, watched = true } = req.body;
+
+    const videoId = req.body.videoId || req.query.videoId;
     const token = req.cookies.token;
 
     if (!videoId) return res.send({ msg: "VideoId Missing" });
