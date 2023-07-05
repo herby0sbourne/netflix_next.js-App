@@ -30,15 +30,14 @@ export default async function stats(req, res) {
     };
 
     if (doesStatusExist) {
-      // update it
+      // update stats
       const resp = await updateStats(token, { ...data });
-      return res.send({ data: resp.data });
-    } else {
-      const resp = await insertStats(token, { ...data });
       return res.send({ data: resp.data });
     }
 
-    return res.send({ mgs: "it works", findVideoId });
+    // Add to stats
+    const resp = await insertStats(token, { ...data });
+    return res.send({ data: resp.data });
   } catch (error) {
     return res.status(500).send({ done: false, error: error.message });
   }
