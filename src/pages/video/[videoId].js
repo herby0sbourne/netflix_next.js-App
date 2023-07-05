@@ -1,16 +1,31 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 import Modal from "react-modal";
 import cls from "classnames";
 
-import styles from "../../styles/video.module.css";
-import { getYouTubeVideoById } from "../../../lib/videos";
-import NavBar from "../../../components/NavBar/NavBar";
+import NavBar from "components/NavBar/NavBar";
+import LikeIcon from "components/icons/LikeIcon";
+import DisLikeIcon from "components/icons/DisLikeIcon";
+
+import { getYouTubeVideoById } from "lib/videos";
+
+import styles from "@/styles/video.module.css";
 
 Modal.setAppElement("#__next");
 export default function Video({ video }) {
-  const router = useRouter();
-
   const { channelTitle, desc, publishTime, title, videoCount } = video;
+  const router = useRouter();
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    setIsDisliked(false);
+  };
+  const handleDislike = () => {
+    setIsDisliked(!isDisliked);
+    setIsLiked(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -30,6 +45,18 @@ export default function Video({ video }) {
           src={`https://www.youtube.com/embed/${router.query.videoId}?autoplay=0&controls=0&rel=0&modestbranding=0&origin=http://example.com`}
           frameBorder="0"></iframe>
 
+        <div className={styles.likeDislikeBtnWrapper}>
+          <button onClick={handleLike}>
+            <div className={styles.btnWrapper}>
+              <LikeIcon selected={isLiked} />
+            </div>
+          </button>
+          <button onClick={handleDislike}>
+            <div className={styles.btnWrapper}>
+              <DisLikeIcon selected={isDisliked} />
+            </div>
+          </button>
+        </div>
         <div className={styles.modalBody}>
           <div className={styles.modalBodyContent}>
             <div className={styles.col1}>
