@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import cls from "classnames";
 
@@ -7,6 +7,7 @@ import NavBar from "components/NavBar/NavBar";
 import LikeIcon from "components/icons/LikeIcon";
 import DisLikeIcon from "components/icons/DisLikeIcon";
 
+import { updateLike } from "utils/fetchCall";
 import { getYouTubeVideoById } from "lib/videos";
 
 import styles from "@/styles/video.module.css";
@@ -14,18 +15,55 @@ import styles from "@/styles/video.module.css";
 Modal.setAppElement("#__next");
 export default function Video({ video }) {
   const { channelTitle, desc, publishTime, title, videoCount } = video;
-  const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisliked] = useState(false);
+  const router = useRouter();
 
-  const handleLike = () => {
+  const videoId = router.query.videoId;
+
+  // const updateLike = async (favourited) => {
+  //   return await fetch("/api/stats", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       videoId,
+  //       favourited
+  //     })
+  //   });
+  // };
+
+  const handleLike = async () => {
     setIsLiked(!isLiked);
     setIsDisliked(false);
+
+    await updateLike(videoId, !isLiked ? 1 : 0);
   };
-  const handleDislike = () => {
+  const handleDislike = async () => {
     setIsDisliked(!isDisliked);
     setIsLiked(false);
+
+    await updateLike(videoId, !isDisliked ? 2 : 0);
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(`/api/stats?videoId=${videoId}`);
+
+      const data = await response.json();
+      console.log(data);
+      console.log(data[0]?.favourited);
+
+      if (data[0]?.favourited === 1) {
+        setIsLiked(true);
+      }
+      if (data[0]?.favourited === 2) {
+        setIsDisliked(true);
+      }
+    }
+    fetchData();
+  }, [videoId]);
 
   return (
     <div className={styles.container}>
@@ -42,7 +80,7 @@ export default function Video({ video }) {
           type="text/html"
           width="100%"
           height="360"
-          src={`https://www.youtube.com/embed/${router.query.videoId}?autoplay=0&controls=0&rel=0&modestbranding=0&origin=http://example.com`}
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=0&controls=0&rel=0&modestbranding=0&origin=http://example.com`}
           frameBorder="0"></iframe>
 
         <div className={styles.likeDislikeBtnWrapper}>
