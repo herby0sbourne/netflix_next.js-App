@@ -8,7 +8,7 @@ export default async function stats(req, res) {
   const { videoId, favourited, watched = true } = req.body;
 
   if (!videoId) {
-    return res.status(401).send({ mgs: "videoId missing" });
+    return res.send({ msg: "VideoId Missing" });
   }
 
   try {
