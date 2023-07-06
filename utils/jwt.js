@@ -1,8 +1,12 @@
 import jwt from "jsonwebtoken";
 
-export const verifyAndDecodeJWT = (token, secret) => {
+export const verifyAndDecodeJWT = (token) => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secret, (error, decoded) => {
+    if (!token) {
+      reject(new Error(`token missing ${token}`));
+      return;
+    }
+    jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET, (error, decoded) => {
       if (error) {
         reject(error);
       } else {
