@@ -10,6 +10,7 @@ import expandIcon from "../../public/static/expand_more.svg";
 import netflixIcon from "../../public/static/netflix_logo.svg";
 
 import styles from "./NavBar.module.css";
+import { logOut } from "utils/fetch";
 
 const NavBar = () => {
   const [isDropdown, setIsDropdown] = useState(false);
@@ -30,9 +31,10 @@ const NavBar = () => {
     })();
   }, []);
 
-  const signOut = async (e) => {
+  const signOut = async () => {
     try {
-      await magic.user.logout();
+      await logOut();
+
       router.push("/login");
     } catch (e) {
       console.log(e, "error logging out");
