@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
 import { findVideoIdByUserId, insertStats, updateStats } from "lib/db/hasura";
+import { verifyAndDecodeJWT } from "utils/jwt";
 
 export default async function stats(req, res) {
   try {
@@ -50,15 +50,3 @@ export default async function stats(req, res) {
     return res.status(500).send({ done: false, error: error.message });
   }
 }
-
-const verifyAndDecodeJWT = (token, secret) => {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, secret, (error, decoded) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(decoded);
-      }
-    });
-  });
-};
