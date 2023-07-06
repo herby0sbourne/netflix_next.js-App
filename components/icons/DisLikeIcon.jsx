@@ -1,5 +1,3 @@
-import React from "react";
-
 const DisLikeIcon = ({ fill = "none", selected = false }) => {
   return (
     <svg

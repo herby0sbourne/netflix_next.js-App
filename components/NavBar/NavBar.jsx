@@ -3,10 +3,12 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { magic } from "../../lib/magic.client";
+
+import { magic } from "lib/magic.client";
 
 import expandIcon from "../../public/static/expand_more.svg";
 import netflixIcon from "../../public/static/netflix_logo.svg";
+
 import styles from "./NavBar.module.css";
 
 const NavBar = () => {

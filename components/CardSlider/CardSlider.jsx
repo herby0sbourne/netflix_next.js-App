@@ -1,7 +1,7 @@
+import Link from "next/link";
 import Card from "components/Card/Card";
 
 import styles from "./CardSlider.module.css";
-import Link from "next/link";
 
 const CardSlider = (props) => {
   const { title, videos = [], size } = props;

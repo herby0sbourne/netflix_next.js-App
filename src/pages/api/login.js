@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-import { mAdmin } from "../../../lib/magic.server";
-import { createUser, isNewUser } from "../../../lib/db/hasura";
-import { setTokenCookie } from "../../../lib/cookies";
+import { mAdmin } from "lib/magic.server";
+import { setTokenCookie } from "lib/cookies";
+import { createUser, isNewUser } from "lib/db/hasura";
 
 export default async function login(req, res) {
   if (!(req.method === "POST")) {

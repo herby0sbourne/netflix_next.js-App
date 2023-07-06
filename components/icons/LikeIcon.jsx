@@ -1,5 +1,3 @@
-import React from "react";
-
 const LikeIcon = ({ fill = "white", selected = false }) => {
   return (
     <svg

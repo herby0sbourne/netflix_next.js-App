@@ -3,11 +3,12 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { magic } from "../../lib/magic.client";
-import useRouterEvent from "../../hooks/useRouterEvent";
 
-import styles from "../styles/Login.module.css";
+import { magic } from "lib/magic.client";
+import useRouterEvent from "hooks/useRouterEvent";
+
 import netflixIcon from "../../public/static/netflix_logo.svg";
+import styles from "@/styles/Login.module.css";
 
 export default function Login() {
   const [userMsg, setUserMsg] = useState("");
