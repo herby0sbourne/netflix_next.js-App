@@ -2,11 +2,20 @@ import Head from "next/head";
 import Banner from "components/Banner/Banner";
 import NavBar from "components/NavBar/NavBar";
 import CardSlider from "components/CardSlider/CardSlider";
-import { getPopularVideos, getVideos } from "lib/videos";
+
+import { getPopularVideos, getVideos, getWatchedVideos } from "lib/videos";
 
 import styles from "@/styles/Home.module.css";
+import redirectUser from "utils/redirectUser";
+import { verifyAndDecodeJWT } from "utils/jwt";
 
-export default function Home({ disneyVideos, prodVideos, travelVideos, popularVideos }) {
+export default function Home({
+  disneyVideos,
+  prodVideos,
+  travelVideos,
+  popularVideos,
+  watchedVideos = []
+}) {
   return (
     <>
       <Head>
@@ -25,6 +34,7 @@ export default function Home({ disneyVideos, prodVideos, travelVideos, popularVi
         />
 
         <CardSlider title={"Disney"} videos={disneyVideos} size="large" />
+        <CardSlider title={"Watched"} videos={watchedVideos} size="small" />
         <CardSlider title={"Travel"} videos={travelVideos} size="small" />
         <CardSlider title={"Productivity"} videos={prodVideos} size="medium" />
         <CardSlider title={"Popular"} videos={popularVideos} size="small" />
@@ -33,13 +43,29 @@ export default function Home({ disneyVideos, prodVideos, travelVideos, popularVi
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const token = context.req ? context.req?.cookies.token : null;
+  const decoded = await verifyAndDecodeJWT(token, process.env.NEXT_PUBLIC_JWT_SECRET);
+  const userId = decoded.issuer;
+
+  if (!userId) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+        permanent: false
+      }
+    };
+  }
+
+  const watchedVideos = await getWatchedVideos(token, userId);
+
   const disneyVideos = await getVideos("disney trailer");
   const prodVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
   const popularVideos = await getPopularVideos();
 
   return {
-    props: { disneyVideos, prodVideos, travelVideos, popularVideos }
+    props: { disneyVideos, prodVideos, travelVideos, popularVideos, watchedVideos }
   };
 }
