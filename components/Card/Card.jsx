@@ -6,7 +6,12 @@ import { motion } from "framer-motion";
 import cls from "classnames";
 
 const Card = (props) => {
-  const { imgUrl = process.env.NEXT_PUBLIC_IMAGE_DEFAULT, size = "medium", idx } = props;
+  const {
+    imgUrl = process.env.NEXT_PUBLIC_IMAGE_DEFAULT,
+    size = "medium",
+    idx,
+    isHover = true
+  } = props;
   const [imgSrc, setImgSrc] = useState(imgUrl);
 
   const classMap = {
@@ -20,11 +25,13 @@ const Card = (props) => {
   };
 
   const scale = idx === 0 ? { scaleY: 1.1 } : { scale: 1.1 };
+
+  const shouldHover = isHover && { whileHover: { ...scale } };
   return (
     <div className={styles.container}>
       <motion.div
         className={cls(styles.imgMotionWrapper, classMap[size])}
-        whileHover={{ ...scale }}
+        {...shouldHover}
         transition={{ duration: 0.3, ease: "easeInOut" }}>
         <Image
           className={styles.cardImg}
