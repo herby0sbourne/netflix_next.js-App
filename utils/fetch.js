@@ -18,3 +18,9 @@ export const likeStatus = async (videoId) => {
 
   return data[0]?.favourited;
 };
+
+export const logOut = async () => {
+  const res = await fetch("/api/logout");
+
+  return await res.json();
+};
