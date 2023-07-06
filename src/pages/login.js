@@ -49,6 +49,7 @@ export default function Login() {
             router.push("/");
           } else {
             setUserMsg("Something went wrong logging in");
+            setIsLoading(false);
           }
         }
       } catch (e) {
@@ -56,6 +57,7 @@ export default function Login() {
       }
     } else {
       setUserMsg("Something went wrong logging in");
+      setIsLoading(false);
     }
   };
 
