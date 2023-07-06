@@ -17,7 +17,7 @@ export default function myList({ likeVideos }) {
       <main className={styles.main}>
         <NavBar />
         <div className={styles.sectionWrapper}>
-          <CardSlider title={"My List"} videos={likeVideos} size="small" wrap />
+          <CardSlider title={"My List"} videos={likeVideos} size="small" isWrap isHover={false} />
         </div>
       </main>
     </>
