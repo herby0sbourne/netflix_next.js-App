@@ -47,7 +47,7 @@ const NavBar = () => {
 
   const handleOnClickMyList = (e) => {
     e.preventDefault();
-    router.push("/browse/mylist");
+    router.push("/browse/my-list");
   };
 
   return (
