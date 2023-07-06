@@ -22,8 +22,8 @@ export default async function login(req, res) {
     setTokenCookie(token, res);
 
     return res.send({ done: true });
-  } catch (e) {
-    console.error("Something went wrong. Please try again");
+  } catch (error) {
+    console.error("Something went wrong. Please try again", error);
     return res.status(500).send({ done: false });
   }
 }
