@@ -7,7 +7,7 @@ import NavBar from "components/NavBar/NavBar";
 import LikeIcon from "components/icons/LikeIcon";
 import DisLikeIcon from "components/icons/DisLikeIcon";
 
-import { updateLike } from "utils/fetchCall";
+import { likeStatus, updateLike } from "utils/fetch";
 import { getYouTubeVideoById } from "lib/videos";
 
 import styles from "@/styles/video.module.css";
@@ -20,19 +20,6 @@ export default function Video({ video }) {
   const router = useRouter();
 
   const videoId = router.query.videoId;
-
-  // const updateLike = async (favourited) => {
-  //   return await fetch("/api/stats", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       videoId,
-  //       favourited
-  //     })
-  //   });
-  // };
 
   const handleLike = async () => {
     setIsLiked(!isLiked);
@@ -49,18 +36,11 @@ export default function Video({ video }) {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`/api/stats?videoId=${videoId}`);
+      const favourited = await likeStatus(videoId);
 
-      const data = await response.json();
-      console.log(data);
-      console.log(data[0]?.favourited);
+      if (favourited === 1) return setIsLiked(true);
 
-      if (data[0]?.favourited === 1) {
-        setIsLiked(true);
-      }
-      if (data[0]?.favourited === 2) {
-        setIsDisliked(true);
-      }
+      if (favourited === 2) return setIsDisliked(true);
     }
     fetchData();
   }, [videoId]);
