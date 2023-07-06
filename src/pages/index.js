@@ -3,11 +3,10 @@ import Banner from "components/Banner/Banner";
 import NavBar from "components/NavBar/NavBar";
 import CardSlider from "components/CardSlider/CardSlider";
 
+import redirectUser from "utils/redirectUser";
 import { getPopularVideos, getVideos, getWatchedVideos } from "lib/videos";
 
 import styles from "@/styles/Home.module.css";
-import redirectUser from "utils/redirectUser";
-import { verifyAndDecodeJWT } from "utils/jwt";
 
 export default function Home({
   disneyVideos,
@@ -44,9 +43,7 @@ export default function Home({
 }
 
 export async function getServerSideProps(context) {
-  const token = context.req ? context.req?.cookies.token : null;
-  const decoded = await verifyAndDecodeJWT(token, process.env.NEXT_PUBLIC_JWT_SECRET);
-  const userId = decoded.issuer;
+  const { token, userId } = await redirectUser(context);
 
   if (!userId) {
     return {
