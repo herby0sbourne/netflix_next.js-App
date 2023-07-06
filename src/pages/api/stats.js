@@ -12,7 +12,7 @@ export default async function stats(req, res) {
 
     if (!token) return res.status(403).send({});
 
-    const decoded = await verifyAndDecodeJWT(token, process.env.NEXT_PUBLIC_JWT_SECRET);
+    const decoded = await verifyAndDecodeJWT(token);
 
     const video = await findVideoIdByUserId(token, decoded.issuer, videoId);
     const doesStatusExist = video?.length > 0;
