@@ -2,10 +2,17 @@ const { verifyAndDecodeJWT } = require("./jwt");
 
 const redirectUser = async (context) => {
   const token = context.req ? context.req?.cookies.token : null;
-  const decoded = await verifyAndDecodeJWT(token, process.env.NEXT_PUBLIC_JWT_SECRET);
-  const userId = decoded.issuer;
+  let userId;
 
-  return { token, userId };
+  try {
+    const decoded = await verifyAndDecodeJWT(token);
+    userId = decoded.issuer;
+
+    return { token, userId };
+  } catch (err) {
+    console.error("error decoding token", err.message);
+    return { token, userId };
+  }
 };
 
 export default redirectUser;
