@@ -4,7 +4,7 @@ import { magic } from "../lib/magic.client";
 import Loader from "./Loader/Loader";
 
 export default function Layout({ children }) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
