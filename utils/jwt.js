@@ -6,7 +6,7 @@ export const verifyAndDecodeJWT = (token) => {
       reject(new Error(`token missing ${token}`));
       return;
     }
-    jwt.verify(token, process.env.NEXT_PUBLIC_JWT_SECRET, (error, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
       if (error) {
         reject(error);
       } else {

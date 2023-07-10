@@ -39,6 +39,6 @@ const generateToken = (metadata) => {
         "x-hasura-user-id": metadata.issuer
       }
     },
-    process.env.NEXT_PUBLIC_JWT_SECRET
+    process.env.JWT_SECRET
   );
 };
