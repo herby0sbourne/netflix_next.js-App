@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { magic } from "../lib/magic";
+import { magic } from "../lib/magic.client";
 import Loader from "./Loader/Loader";
 
 export default function Layout({ children }) {
@@ -36,6 +36,10 @@ export default function Layout({ children }) {
       <Loader />
     </>
   ) : (
-    <>{children}</>
+    <>
+      {/* navbar */}
+      <main>{children}</main>
+      {/* footer */}
+    </>
   );
 }
